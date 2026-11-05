@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{Title}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='film_noir.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'header.html' %}
+    {% include 'navigation.html' %}
+    <content>{% block content %}{% endblock %}</content>
+    {% include 'footer.html' %}
+    {% block footer_scripts%}{% endblock %}
+</body>
+</html>

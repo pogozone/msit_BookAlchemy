@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="library-container">
+    <h2>Der Katalogeintrag für das Buch {{ book.title }}</h2>
+
+    <div>
+        <p><b>Titel des Buches:</b> {{ book.title }}</p>
+
+    </div>
+
+    <div>
+        <p><b>ISBN:</b> {{ book.isbn }}</p>
+
+    </div>
+
+    <div>
+        <p><b>Erscheinungsjahr:</b> {{ book.publication_year }}</p>
+    </div>
+
+    <div>
+        <p><b>Verfasser (Autor):</b> {{ author.name }}</p>
+    </div>
+</div>
+{% endblock %}

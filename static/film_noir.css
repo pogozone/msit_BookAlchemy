@@ -1,0 +1,437 @@
+/* ==========================================================================
+   BookAlchemy - Film Noir Theme (film_noir.css)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;600&display=swap');
+
+:root {
+    --bg-dark: #070709;
+    --bg-card: #111115;
+    --bg-input: #181820;
+    --text-primary: #e0e0e0;
+    --text-muted: #8a8a93;
+    --accent-red: #8b0000;
+    --accent-gold: #c5a059;
+    --border-color: #24242e;
+    --font-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
+    --font-body: 'Playfair Display', Georgia, serif;
+    --font-mono: 'Source Code Pro', monospace;
+}
+
+/* Globales Reset
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.library-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.library-container fieldset {
+    padding: 20px;
+}
+.library-container fieldset legend {
+    padding: 0 20px;
+}
+
+/* Navigation als kompakter Film-Noir-Header mit Hintergrundbild
+   ========================================================================== */
+nav,
+.victorian-nav {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    background: url('./assets/header-noir.jpg') no-repeat center bottom / cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    margin-bottom: 2rem;
+}
+
+/* Titelbereich mit exaktem Offset via margin-bottom */
+.nav-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 1.5rem 1rem 0.5rem 1rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -150px;
+}
+
+.nav-header h2,
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.2);
+    margin: 0;
+}
+
+/* Link-Leiste direkt im unteren, einfarbigen Bereich */
+.nav-links,
+nav ul {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0.8rem 1rem;
+    width: 100%;
+    background-color: rgba(5, 5, 7, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-links a,
+nav a {
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nav-links a:hover,
+nav a:hover,
+nav a.active {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Hauptinhalt Container (Für Listen & Tabellen in voller Breite)
+   ========================================================================== */
+main,
+.library-card,
+.main-container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 1rem auto 2.5rem auto;
+    flex: 1;
+}
+
+main h2,
+.library-card h2 {
+    font-family: var(--font-heading);
+    color: var(--accent-gold);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Tabellen-Styling (Fester Layout-Modus ohne horizontales Scrollen)
+   ========================================================================== */
+.table-responsive {
+    width: 100%;
+    overflow-x: hidden;
+    margin-top: 1.5rem;
+}
+
+#books-table,
+.victorian-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+}
+
+#books-table a {
+        color: var(--text-primary);
+    text-decoration: wavy !important;
+}
+
+#books-table th,
+.victorian-table th,
+#books-table td,
+.victorian-table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    vertical-align: middle;
+}
+
+#books-table th,
+.victorian-table th {
+    background-color: #14141a;
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+    user-select: none;
+}
+
+#books-table th[onclick],
+.victorian-table th[onclick] {
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#books-table th[onclick]:hover,
+.victorian-table th[onclick]:hover {
+    background-color: #1f1f28;
+    color: #ffffff;
+}
+
+#books-table td,
+.victorian-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+#books-table tbody tr:hover,
+.victorian-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Feste Spaltenbreiten */
+#books-table th:nth-child(1), #books-table td:nth-child(1) { width: 7%; }
+#books-table th:nth-child(2), #books-table td:nth-child(2) { width: 4%; }
+#books-table th:nth-child(3), #books-table td:nth-child(3) { width: 32%; }
+#books-table th:nth-child(4), #books-table td:nth-child(4) { width: 14%; }
+#books-table th:nth-child(5), #books-table td:nth-child(5) { width: 8%; }
+#books-table th:nth-child(6), #books-table td:nth-child(6) { width: 15%; }
+#books-table th:nth-child(7), #books-table td:nth-child(7) { width: 12%; }
+#books-table th:nth-child(8), #books-table td:nth-child(8) { width: 12%; }
+
+#books-table img,
+.victorian-table img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    filter: grayscale(40%) contrast(115%);
+    transition: filter 0.3s ease;
+}
+
+#books-table img:hover,
+.victorian-table img:hover {
+    filter: grayscale(0%) contrast(100%);
+}
+
+/* Buttons in Tabellen: Als Block angeordnet, um Überlagerungen zu verhindern */
+#books-table td button,
+#books-table td .btn,
+.victorian-table td button,
+.victorian-table td .btn {
+    display: block;
+    width: 100%;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.2rem;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Formulare & Eingabemasken
+   ========================================================================== */
+form {
+    max-width: 600px;
+    margin: 2.5rem auto;
+    background-color: var(--bg-card);
+    padding: 2.5rem 3rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-input) !important;
+    border: 1px solid var(--border-color);
+    color: #ffffff !important;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 8px rgba(197, 160, 89, 0.3);
+}
+
+/* Formular-Wrapper in Tabellenzellen unsichtbar machen */
+.table-action-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    max-width: none;
+}
+
+/* Damit das Styling (.btn-danger) auch im Formular-Wrapper greift */
+#books-table td .table-action-form button,
+.victorian-table td .table-action-form button,
+#books-table td .table-action-form .btn-danger,
+.victorian-table td .table-action-form .btn-danger {
+    display: block;
+    width: unset;
+    min-width: 0;
+    font-size: 0.7rem;
+    padding: 8px;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Spezielles Suchformular */
+#search {
+    max-width: 100%;
+    margin: 0 0 1.5rem 0;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+#search label {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+#search input[type="text"] {
+    margin-bottom: 0;
+    height: 42px;
+    padding: 0 1rem;
+}
+
+#search button,
+#search input[type="button"],
+#search input[type="submit"] {
+    height: 42px;
+    padding: 0 1.5rem;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* Buttons (In Formularen zentriert)
+   ========================================================================== */
+button,
+input[type="button"],
+input[type="submit"],
+.btn {
+    background-color: #1e1e26;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-radius: 2px;
+}
+
+form button,
+form input[type="submit"],
+form input[type="button"] {
+    display: block;
+    margin: 1.5rem auto 0 auto;
+    width: auto;
+    min-width: 180px;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.btn:hover {
+    background-color: var(--text-primary);
+    color: var(--bg-dark);
+    border-color: var(--text-primary);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+a[href*="delete"] button,
+.btn-danger {
+    border-color: rgba(139, 0, 0, 0.6);
+    color: #e0b0b0;
+}
+
+a[href*="delete"] button:hover,
+.btn-danger:hover {
+    background-color: var(--accent-red);
+    color: #ffffff;
+    border-color: var(--accent-red);
+    box-shadow: 0 0 12px rgba(139, 0, 0, 0.8);
+}
+
+/* Footer
+   ========================================================================== */
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+    border-top: 1px solid var(--border-color);
+    background-color: #040405;
+    margin-top: auto;
+}

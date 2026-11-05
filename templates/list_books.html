@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="library-card">
+    <h2>Katalog der verzeichneten Werke</h2>
+    <div>
+        <form id="search" action="{{ url_for('search_book') }}" method="POST">
+            <label>
+                <input type="text" name="query_param" value="{{ query_param }}">
+            </label>
+            <button type="button" onclick="document.getElementById('search').submit();" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                Suchen
+            </button>
+        </form>
+    </div>
+    {% if message %}
+        <div class="notification">{{ message }}</div>
+    {% endif %}
+    <div class="table-responsive">
+        <table id="books-table" class="victorian-table">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+                    <th>ID</th>
+                    <th style="cursor: pointer;" onclick="sortTable(2)">Titel ⇅</th>
+                    <th>ISBN</th>
+                    <th style="cursor: pointer;" onclick="sortTable(4)">Jahr ⇅</th>
+                    <th style="cursor: pointer;" onclick="sortTable(5)">Autor ⇅</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book, author in books %}
+                    <tr>
+                        <td style="width: 60px;">
+                            {% if book.cover_url %}
+                                <img src="{{ book.cover_url }}" alt="Cover von {{ book.title }}" style="width: 100px; height: auto; border: 1px solid #70551d; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+                            {% else %}
+                                <span style="color: #bfa888; font-size: 0.8rem; font-style: italic;">Kein Bild</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ book.id }}</td>
+                        <td>
+                            <a href="{{ url_for('view_book', book_id=book.id) }}">
+                                {{ book.title }} 🔗
+                            </a>
+                        </td>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.publication_year or '–' }}</td>
+                        <td>{{ author.name if author else 'Unbekannt' }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_book', book_id=book.id) }}" style="text-decoration: none;">
+                                <button type="button" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.85rem;">Bearbeiten</button>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" class="table-action-form">
+                                <button type="submit" class="btn-danger" onclick="return confirm('Wirklich löschen?');">Löschen</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
+{% block footer_scripts%}
+    <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+{% endblock %}

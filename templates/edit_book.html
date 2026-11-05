@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="library-container">
+    {% if message %}
+        <div class="notification">{{ message }}</div>
+    {% endif %}
+    <form action="{{ url_for('edit_book', book_id=book.id) }}" method="POST">
+        <fieldset>
+            <legend>Den Katalogeintrag für das Buch {{ book.title }} bearbeiten</legend>
+
+            <div>
+                <label for="title">Titel des Buches:</label>
+                <input type="text" id="title" name="title" required value="{{ book.title }}">
+            </div>
+
+            <div>
+                <label for="isbn">ISBN:</label>
+                <input type="text" id="isbn" name="isbn" value="{{ book.isbn }}">
+            </div>
+
+            <div>
+                <label for="publication_year">Erscheinungsjahr:</label>
+                <input type="number" id="publication_year" name="publication_year" value="{{ book.publication_year }}">
+            </div>
+
+            <div>
+                <label for="author_id">Verfasser (Autor):</label>
+                <select id="author_id" name="author_id" required>
+                    <option value="" disabled {% if not book.author_id %}selected{% endif %}>-- Autor auswählen --</option>
+                    {% for author in authors %}
+                        <option value="{{ author.id }}" {% if author.id == book.author_id %}selected{% endif %}>
+                            {{ author.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Band aktualisieren</button>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

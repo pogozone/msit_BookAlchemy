@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="library-container">
+    {% if message %}
+        <div class="notification">{{ message }}</div>
+    {% endif %}
+    <form action="/add_author" method="POST">
+        <fieldset>
+            <legend>Autor anlegen</legend>
+
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Name des Autors">
+            </div>
+
+            <div>
+                <label for="birth_date">Geburtsdatum:</label>
+                <input type="date" id="birth_date" name="birth_date">
+            </div>
+
+            <div>
+                <label for="date_of_death">Sterbedatum:</label>
+                <input type="date" id="date_of_death" name="date_of_death">
+            </div>
+
+            <button type="submit">Speichern</button>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

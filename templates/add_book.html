@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="library-container">
+    {% if message %}
+        <div class="notification">{{ message }}</div>
+    {% endif %}
+    <form action="{{ url_for('add_book') }}" method="POST">
+        <fieldset>
+            <legend>Neues Werk in den Katalog aufnehmen</legend>
+
+            <div>
+                <label for="title">Titel des Buches:</label>
+                <input type="text" id="title" name="title" required placeholder="z. B. Die Verwandlung">
+            </div>
+
+            <div>
+                <label for="isbn">ISBN:</label>
+                <input type="text" id="isbn" name="isbn" placeholder="z. B. 978-3-453-14697-6">
+            </div>
+
+            <div>
+                <label for="publication_year">Erscheinungsjahr:</label>
+                <input type="number" id="publication_year" name="publication_year" placeholder="z. B. 1915">
+            </div>
+
+            <div>
+                <label for="author_id">Verfasser (Autor):</label>
+                <select id="author_id" name="author_id" required>
+                    <option value="" disabled selected>-- Autor auswählen --</option>
+                    {% for author in authors %}
+                        <option value="{{ author.id }}">{{ author.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Band ins Archiv aufnehmen</button>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

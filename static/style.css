@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Playfair Display', Georgia, serif;
+    background-color: #0f0a06;
+    background-image: radial-gradient(circle at 50% 20%, #1f140c 0%, #0f0a06 100%);
+    color: #f4ecd8;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
+/* --- Layout-Container --- */
+/* Schmaler Container für Formulare (übersichtlich & zentriert) */
+.library-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Breiter Container für Tabellen & Kataloge (nutzt den vollen Bildschirm) */
+.library-container-wide {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- Gemeinsamer Stil für Boxen --- */
+.victorian-nav,
+form,
+.library-card {
+    background: linear-gradient(to bottom, #1d120a, #130b05);
+    border: 2px solid #8c6d23;
+    border-radius: 6px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    margin-bottom: 2rem;
+}
+
+/* --- Navigation --- */
+.victorian-nav {
+    text-align: center;
+    padding: 1.2rem 2rem;
+}
+
+.victorian-nav h2 {
+    color: #d4af37;
+    font-size: 1.3rem;
+    margin: 0 0 1rem 0;
+    letter-spacing: 2px;
+}
+
+.victorian-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+.victorian-nav a {
+    color: #d4af37;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 1px solid #8c6d23;
+    background: linear-gradient(to bottom, #2b1d11, #1a1007);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.victorian-nav a:hover {
+    color: #ffffff;
+    border-color: #d4af37;
+    background: linear-gradient(to bottom, #3b2818, #26190e);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+/* --- Formulare --- */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+legend, h3 {
+    color: #d4af37;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #c59b27;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #d8caaf;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #0b0704;
+    border: 1px solid #70551d;
+    border-radius: 4px;
+    color: #f4ecd8;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+button {
+    background: linear-gradient(to bottom, #8c6d23, #594313);
+    border: 1px solid #d4af37;
+    color: #fcf8ee;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #a6812a, #6e5218);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+
+/* --- Tabellen & Karten --- */
+.library-card {
+    width: 100%;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid #4a381d;
+    text-align: left;
+}
+
+th {
+    color: #d4af37;
+    border-bottom: 2px solid #d4af37;
+    background-color: #140d07;
+}
+
+tr:hover {
+    background: rgba(212, 175, 55, 0.05);
+}
+
+/* --- Benachrichtigungen & Hinweise --- */
+.notification {
+    background: #2b1d11;
+    border: 1px solid #d4af37;
+    color: #f4ecd8;
+    padding: 1rem;
+    border-radius: 4px;
+    text-align: center;
+    font-style: italic;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    margin-bottom: 2rem;
+}
+
+.empty-notice {
+    font-style: italic;
+    color: #bfa888;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+/* --- Responsives Verhalten --- */
+@media (max-width: 600px) {
+    body {
+        padding: 0.5rem;
+    }
+    .victorian-nav, form, .library-card {
+        padding: 1.2rem;
+    }
+    .victorian-nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
