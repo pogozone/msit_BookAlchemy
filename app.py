@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
