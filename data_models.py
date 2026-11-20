@@ -1,11 +1,9 @@
-from datetime import date, datetime
+﻿from datetime import date
 
-from flask import Flask
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy.orm import mapped_column, Mapped
 from db import Base, engine
 
-app = Flask(__name__)
 
 class Authors(Base):
     __tablename__ = 'authors'
@@ -16,6 +14,7 @@ class Authors(Base):
 
     def __repr__(self):
         return f"Autorenname: {self.name} Geburtstag: {self.birth_date} - falls verstorben, dann am: {self.date_of_death}"
+
 
 class Books(Base):
     __tablename__ = 'books'
@@ -37,4 +36,3 @@ class Books(Base):
 
 
 #Base.metadata.create_all(engine)
-
