@@ -4,17 +4,17 @@ from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 
 from flask import Flask, render_template, request
-import os
+from pathlib import Path
 from data_models import Authors, Books
 from db import Session
 
 app = Flask(__name__)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
-
+basedir = Path(__file__).resolve().parent
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{basedir / 'data' / 'library.sqlite'}"
 
 def get_post_book(this_request):
+    """Extract (title, isbn, publication_year, author_id) from book form data."""
     publication_year = this_request.form.get("publication_year")
     author_id = this_request.form.get("author_id")
 
@@ -25,7 +25,7 @@ def get_post_book(this_request):
         int(author_id) if author_id else None
     )
 
-def normalize_isbn(raw_isbn: str | None) -> str | None:
+def normalize_isbn(raw_isbn: Optional[str]) -> Optional[str]:
     if not raw_isbn:
         return None
     cleaned = raw_isbn.strip()
@@ -167,7 +167,7 @@ def edit_author(author_id):
                         session.rollback()
                         message = f"Ein anderer Autor mit dem Namen '{name}' existiert bereits."
 
-        return render_template('edit_author.html', author=author, message=message)
+    return render_template('edit_author.html', author=author, message=message)
 
 @app.route('/search_book', methods=['POST'])
 def search_book():
