@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 
 from flask import Flask, render_template, request
@@ -214,15 +214,15 @@ def delete_book(book_id):
 @app.route('/delete_author/<int:author_id>', methods=['POST'])
 def delete_author(author_id):
     message = ''
-    with Session()  as session:
+    with Session.begin() as session:
+        result = session.execute(delete(Authors).where(Authors.id == author_id))
+        if result.rowcount:
+            message = "Der Autor und seine zugehörigen Bücher wurden aus dem Katalog entfernt."
+        else:
+            message = "Der Autor wurde nicht gefunden."
 
-        author = session.get(Authors, author_id)
-        if author:
-            session.delete(author)
-            session.commit()
-
+    with Session() as session:
         authors = session.scalars(select(Authors)).all()
-        message = f"Der Autor ist aus dem Katalog entfernt worden."
 
     return render_template('list_authors.html', authors=authors, message=message)
 
