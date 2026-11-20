@@ -25,6 +25,12 @@ def get_post_book(this_request):
         int(author_id) if author_id else None
     )
 
+def normalize_isbn(raw_isbn: str | None) -> str | None:
+    if not raw_isbn:
+        return None
+    cleaned = raw_isbn.strip()
+    return cleaned or None
+
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     message = ''
@@ -58,27 +64,37 @@ def add_author():
 
 @app.route('/add_book', methods=['GET', 'POST'])
 def add_book():
-
     message = ''
 
     if request.method == 'POST':
+        title, raw_isbn, publication_year, author_id = get_post_book(request)
+        isbn = normalize_isbn(raw_isbn)
 
-        title, isbn, publication_year, author_id = get_post_book(request)
+        with Session() as session:
+            existing_book = None
+            if isbn:
+                existing_book = session.scalar(select(Books).where(Books.isbn == isbn))
 
-        book = Books(
-            title=title,
-            isbn=isbn,
-            publication_year=publication_year,
-            author_id=author_id
-        )
+            if existing_book:
+                message = f"Fehler: Ein Buch mit der ISBN '{isbn}' existiert bereits im Katalog ('{existing_book.title}')."
+            else:
+                book = Books(
+                    title=title,
+                    isbn=isbn,
+                    publication_year=publication_year,
+                    author_id=author_id
+                )
+                session.add(book)
+                try:
+                    session.commit()
+                    message = f"Das Buch: {title} wurde erfolgreich in die Bibliothek aufgenommen."
+                except IntegrityError:
+                    session.rollback()
+                    message = f"Fehler: Ein Buch mit der ISBN '{isbn}' existiert bereits im Katalog."
 
-        with Session.begin () as session:
-            session.add(book)
-
-        message = f"Das Buch: {title} wurde erfolgreich in die Bibliothek aufgenommen."
-
-    with Session()  as session:
+    with Session() as session:
         authors = session.scalars(select(Authors)).all()
+
     return render_template('add_book.html', authors=authors, message=message)
 
 @app.route('/list_authors')

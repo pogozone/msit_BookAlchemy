@@ -19,11 +19,11 @@ class Authors(Base):
 
 class Books(Base):
     __tablename__ = 'books'
-    id : Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    title : Mapped[str]
-    isbn : Mapped[str | None] = mapped_column(nullable=True)
-    publication_year : Mapped[int | None] = mapped_column(nullable=True)
-    author_id : Mapped[int | None] = mapped_column(ForeignKey('authors.id', ondelete="CASCADE"), nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    title: Mapped[str]
+    isbn: Mapped[str | None] = mapped_column(unique=True, nullable=True)
+    publication_year: Mapped[int | None] = mapped_column(nullable=True)
+    author_id: Mapped[int | None] = mapped_column(ForeignKey('authors.id', ondelete="CASCADE"), nullable=True)
 
     @property
     def cover_url(self) -> str | None:
