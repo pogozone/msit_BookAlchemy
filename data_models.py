@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 class Authors(Base):
     __tablename__ = 'authors'
-    id : Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name : Mapped[str]
-    birth_date : Mapped[date | None] = mapped_column(nullable=True)
-    date_of_death : Mapped[date | None] = mapped_column(nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    birth_date: Mapped[date | None] = mapped_column(nullable=True)
+    date_of_death: Mapped[date | None] = mapped_column(nullable=True)
 
     def __repr__(self):
         return f"Autorenname: {self.name} Geburtstag: {self.birth_date} - falls verstorben, dann am: {self.date_of_death}"

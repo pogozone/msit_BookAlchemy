@@ -1,6 +1,7 @@
 from datetime import date
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 from flask import Flask, render_template, request
 import os
@@ -28,21 +29,30 @@ def get_post_book(this_request):
 def add_author():
     message = ''
     if request.method == 'POST':
-
-        name = request.form.get("name") or ""
+        name = (request.form.get("name") or "").strip()
         birth_date = date.fromisoformat(d) if (d := request.form.get("birth_date")) else None
         date_of_death = date.fromisoformat(d) if (d := request.form.get("date_of_death")) else None
 
-        author = Authors(
-            name=name,
-            birth_date=birth_date,
-            date_of_death=date_of_death
-        )
-
-        with Session.begin () as session:
-            session.add(author)
-
-        message = f"Autor: {name} wurde erfolgreich angelegt."
+        if not name:
+            message = "Bitte einen Namen für den Autor angeben."
+        else:
+            with Session() as session:
+                existing = session.scalar(select(Authors).where(Authors.name == name))
+                if existing:
+                    message = f"Der Autor '{name}' existiert bereits."
+                else:
+                    author = Authors(
+                        name=name,
+                        birth_date=birth_date,
+                        date_of_death=date_of_death
+                    )
+                    session.add(author)
+                    try:
+                        session.commit()
+                        message = f"Autor: {name} wurde erfolgreich angelegt."
+                    except IntegrityError:
+                        session.rollback()
+                        message = f"Der Autor '{name}' existiert bereits."
 
     return render_template('add_author.html', message=message)
 
@@ -71,14 +81,14 @@ def add_book():
         authors = session.scalars(select(Authors)).all()
     return render_template('add_book.html', authors=authors, message=message)
 
-@app.route('/list_authors', methods=['GET', 'POST'])
+@app.route('/list_authors')
 def list_authors():
     with Session()  as session:
         authors = session.scalars(select(Authors)).all()
     return render_template('list_authors.html', authors=authors)
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/list_books', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/list_books')
 def list_books():
     with Session()  as session:
         stmt = select(Books, Authors).outerjoin(Authors, Books.author_id == Authors.id)
@@ -86,7 +96,7 @@ def list_books():
 
     return render_template('list_books.html', books=books)
 
-@app.route('/edit_book/<int:book_id>', methods=['GET', 'POST', 'PUT'])
+@app.route('/edit_book/<int:book_id>', methods=['GET', 'POST'])
 def edit_book(book_id):
     message = ''
     if request.method == 'POST':
@@ -109,28 +119,39 @@ def edit_book(book_id):
 
     return render_template('edit_book.html', book=book, authors=authors, message=message)
 
-@app.route('/edit_author/<int:author_id>', methods=['GET', 'POST', 'PUT'])
+@app.route('/edit_author/<int:author_id>', methods=['GET', 'POST'])
 def edit_author(author_id):
     message = ''
-    if request.method == 'POST':
-        with Session.begin () as session:
+    with Session() as session:
+        author = session.get(Authors, author_id)
+        if not author:
+            return "Autor nicht gefunden", 404
 
-            name = request.form.get("name") or ""
+        if request.method == 'POST':
+            name = (request.form.get("name") or "").strip()
             birth_date = date.fromisoformat(d) if (d := request.form.get("birth_date")) else None
             date_of_death = date.fromisoformat(d) if (d := request.form.get("date_of_death")) else None
 
-            stmt = select(Authors).where(Authors.id == author_id)
-            author_to_update = session.execute(stmt).scalar_one()
-            author_to_update.name = name
-            author_to_update.birth_date = birth_date
-            author_to_update.date_of_death = date_of_death
+            if not name:
+                message = "Bitte einen Namen für den Autor angeben."
+            else:
+                duplicate = session.scalar(
+                    select(Authors).where(Authors.name == name, Authors.id != author_id)
+                )
+                if duplicate:
+                    message = f"Ein anderer Autor mit dem Namen '{name}' existiert bereits."
+                else:
+                    author.name = name
+                    author.birth_date = birth_date
+                    author.date_of_death = date_of_death
+                    try:
+                        session.commit()
+                        message = f"Der Autor '{name}' wurde erfolgreich aktualisiert."
+                    except IntegrityError:
+                        session.rollback()
+                        message = f"Ein anderer Autor mit dem Namen '{name}' existiert bereits."
 
-        message = f"Der Autor '{name}' wurde erfolgreich aktualisiert."
-
-    with Session()  as session:
-        author = session.get(Authors, author_id)
-
-    return render_template('edit_author.html', author=author, message=message)
+        return render_template('edit_author.html', author=author, message=message)
 
 @app.route('/search_book', methods=['POST'])
 def search_book():
@@ -149,7 +170,7 @@ def search_book():
 
     return render_template('list_books.html', books=books, query_param=query_param, message=message)
 
-@app.route('/book/<int:book_id>', methods=['GET', 'POST', 'PUT'])
+@app.route('/book/<int:book_id>')
 def view_book(book_id):
 
     with Session()  as session:
